@@ -1,5 +1,5 @@
-import BaseController from "./baseController.js";
-import Customer from "../models/Customer.js";
+import baseController from "./base.controller.js";
+import customer from "../model/customer.js";
 
-class CustomerController extends BaseController {}
-export default new CustomerController(Customer);
+class customerController extends baseController {}
+export default new customerController(customer);

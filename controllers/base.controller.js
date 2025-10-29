@@ -1,4 +1,4 @@
-export default class BaseController {
+export default class baseController {
   constructor(Model) {
     this.Model = Model;
   }
@@ -18,7 +18,7 @@ export default class BaseController {
 
   getAll = async (req, res, next) => {
     try {
-      const { search, page = 1, limit = 10, sort = "-createdAt" } = req.query;
+      const { search, page = 1, limit = 10, sort = "createdAt" } = req.query;
 
       let query = {};
       if (search) {

@@ -5,7 +5,7 @@ import { validateOrderItem } from "../middlewares/validation.js";
 
 const router = express.Router();
 
-const table = "orders";
+const table = "waterProduct";
 
 router.post("/", authGuard, validateOrderItem, (req, res) => createRecord(req, res, table));
 router.get("/", authGuard, (req, res) => getRecords(req, res, table));
