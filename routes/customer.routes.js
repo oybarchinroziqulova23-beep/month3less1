@@ -1,17 +1,17 @@
-import express from "express";
-import { createRecord, getRecords, getRecordById, updateRecord, deleteRecord, searchRecords } from "../controllers/universalController.js";
-import { authGuard } from "../middlewares/authGuard.js";
-import { validateOrderItem } from "../middlewares/validation.js";
+import { Router } from 'express';
+import { authGuard } from '../middleware/authGuard.js';
+import { roleGuard } from '../middleware/roleGuard.js';
+import { selfGuard } from '../middleware/selfGuard.js';
+import { validate } from '../middleware/validation.js';
+import { customerValidate, customerUpdate } from '../validations/customer.js';
+import { customerController } from '../controllers/customer.controller.js';
 
-const router = express.Router();
+const router = Router();
 
-const table = "customer";
+router.get('/', authGuard, roleGuard(['admin', 'manager', 'staff']), customerController.getAll);
+router.get('/:id', authGuard, selfGuard(['admin', 'manager', 'customer']), customerController.getOne);
+router.post('/', validate(customerValidate), customerController.createOne);
+router.put('/:id', authGuard, selfGuard(['admin', 'manager', 'customer']), validate(customerUpdate), customerController.updateOne);
+router.delete('/:id', authGuard, selfGuard(['admin', 'manager', 'customer']), customerController.deleteOne);
 
-router.post("/", authGuard, validateOrderItem, (req, res) => createRecord(req, res, table));
-router.get("/", authGuard, (req, res) => getRecords(req, res, table));
-router.get("/search", authGuard, (req, res) => searchRecords(req, res, table));
-router.get("/:id", authGuard, (req, res) => getRecordById(req, res, table));
-router.put("/:id", authGuard, validateOrderItem, (req, res) => updateRecord(req, res, table));
-router.delete("/:id", authGuard, (req, res) => deleteRecord(req, res, table));
-
-export default router;
+export { router as customerRouter };

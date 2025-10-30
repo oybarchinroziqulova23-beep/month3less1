@@ -1,4 +1,4 @@
-import { AppError } from "../helpers/error.Message.js";
+import { AppError } from "../helper/errorMessage.js";
 
 export const notFound = (req, res, next) => {
   const error = new AppError(`URL topilmadi: ${req.originalUrl}`, 404);

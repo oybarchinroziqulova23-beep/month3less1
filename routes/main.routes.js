@@ -1,21 +1,22 @@
-import express from "express";
-import customerRoutes from "./customer.routes.js";
-import productRoutes from "./water_product.routes.js";
-import orderRoutes from "./orders.routes.js";
-import addressRoutes from "./address.routes.js";
-import orderItemsRoutes from "./order_items.routes.js";
-import deliveryStaffRoutes from "./delivery_staff.routes.js";
-import paymentRoutes from "./payment.routes.js";
+import { Router } from 'express';
+import { districtRouter } from './district.routes.js';
+import { deliveryStaffRouter } from './deliveryStaff.routes.js';
+import { customerRouter } from './customer.routes.js';
+import { productRouter } from './waterProduct.routes.js';
+import { orderRouter } from './order.routes.js';
+import { orderItemRouter } from './orderItem.routes.js';
+import { addressRouter } from './address.routes.js';
+import { paymentRouter } from './payment.routes.js';
 
-const router = express.Router();
+const router = Router();
 
-router.use("/customer", customerRoutes);
-router.use("/product", productRoutes);
-router.use("/order", orderRoutes);
-router.use("/address", addressRoutes);
-router.use("/order-items", orderItemsRoutes);
-router.use("/delivery",deliveryStaffRoutes);
-router.use("/payment",paymentRoutes);
-router.use("/adsress",addressRoutes);
+router.use('/districts', districtRouter);
+router.use('/delivery-staff', deliveryStaffRouter);
+router.use('/customers', customerRouter);
+router.use('/products', productRouter);
+router.use('/orders', orderRouter);
+router.use('/order-items', orderItemRouter);
+router.use('/addresses', addressRouter);
+router.use('/payments', paymentRouter);
 
-export default router;
+export { router as mainRouter };
