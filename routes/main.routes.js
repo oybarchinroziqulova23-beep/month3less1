@@ -4,7 +4,7 @@ import { deliveryStaffRouter } from './deliveryStaff.routes.js';
 import { customerRouter } from './customer.routes.js';
 import { productRouter } from './waterProduct.routes.js';
 import { orderRouter } from './order.routes.js';
-import { orderItemRouter } from './orderItem.routes.js';
+import { orderItemRouter } from './orderItems.routes.js';
 import { addressRouter } from './address.routes.js';
 import { paymentRouter } from './payment.routes.js';
 
@@ -19,4 +19,5 @@ router.use('/order-items', orderItemRouter);
 router.use('/addresses', addressRouter);
 router.use('/payments', paymentRouter);
 
-export { router as mainRouter };
+const mainRouter = router;
+export default mainRouter;

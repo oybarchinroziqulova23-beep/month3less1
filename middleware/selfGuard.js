@@ -1,4 +1,4 @@
-import { ApiError } from '../helper/errorMessage.js';
+import { AppError } from '../helper/errorMessage.js';
 
 /**
  * Foydalanuvchi faqat o'z ma'lumotiga ruxsat beruvchi middleware
@@ -20,7 +20,7 @@ export function selfGuard(fieldName = 'user_id') {
         null;
 
       if (!resourceOwnerId) {
-        return next(new ApiError(400, `Missing field: ${fieldName}`));
+        return next(new AppError(400, `Missing field: ${fieldName}`));
       }
 
       // Agar token foydalanuvchining ID si bilan ma'lumot egasi ID si mos bo'lsa
@@ -29,9 +29,9 @@ export function selfGuard(fieldName = 'user_id') {
       }
 
       // Aks holda ruxsat berilmaydi
-      return next(new ApiError(403, 'You do not have permission to modify this resource.'));
+      return next(new AppError(403, 'You do not have permission to modify this resource.'));
     } catch (error) {
-      return next(new ApiError(500, 'SelfGuard check failed.'));
+      return next(new AppError(500, 'SelfGuard check failed.'));
     }
   };
 }

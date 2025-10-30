@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { authGuard } from '../middleware/authGuard.js';
 import { roleGuard } from '../middleware/roleGuard.js';
 import { validate } from '../middleware/validation.js';
-import { productValidate, productUpdate } from '../validations/product.js';
+import { productValidate, productUpdate } from '../validations/waterProducts.js';
 import { waterProductController } from '../controllers/waterProducts.controller.js';
 
 const router = Router();

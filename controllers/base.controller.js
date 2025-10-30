@@ -3,10 +3,10 @@ export default class baseController {
     this.Model = Model;
   }
 
-  create = async (req, res, next) => {
+  createOne = async (req, res, next) => {
     try {
       const newData = await this.Model.create(req.body);
-      res.status(201).json({
+      return res.status(201).json({
         success: true,
         message: "Created successfully",
         data: newData,
@@ -18,32 +18,35 @@ export default class baseController {
 
   getAll = async (req, res, next) => {
     try {
-      const { search, page = 1, limit = 10, sort = "createdAt" } = req.query;
+      const { search, page = 1, limit = 10, sort = "-createdAt" } = req.query;
 
       let query = {};
       if (search) {
-        const fields = Object.keys(this.Model.schema.paths).filter(
-          (f) => !["_id", "__v", "createdAt", "updatedAt"].includes(f)
+        const searchableFields = Object.keys(this.Model.schema.paths).filter(
+          (field) =>
+            !["_id", "__v", "createdAt", "updatedAt"].includes(field)
         );
+
         query = {
-          $or: fields.map((field) => ({
+          $or: searchableFields.map((field) => ({
             [field]: { $regex: search, $options: "i" },
           })),
         };
       }
 
-      const skip = (page - 1) * limit;
+      const skip = (parseInt(page) - 1) * parseInt(limit);
 
       const [data, total] = await Promise.all([
         this.Model.find(query)
-          .skip(parseInt(skip))
+          .skip(skip)
           .limit(parseInt(limit))
           .sort(sort),
         this.Model.countDocuments(query),
       ]);
 
-      res.json({
+      return res.status(200).json({
         success: true,
+        message: "Retrieved successfully",
         total,
         page: Number(page),
         limit: Number(limit),
@@ -55,18 +58,25 @@ export default class baseController {
     }
   };
 
-  getById = async (req, res, next) => {
+  getOne = async (req, res, next) => {
     try {
       const data = await this.Model.findById(req.params.id);
       if (!data)
-        return res.status(404).json({ success: false, message: "Not found" });
-      res.json({ success: true, data });
+        return res
+          .status(404)
+          .json({ success: false, message: "Not found such an ID" });
+
+      return res.status(200).json({
+        success: true,
+        message: "Retrieved successfully",
+        data,
+      });
     } catch (error) {
       next(error);
     }
   };
 
-  update = async (req, res, next) => {
+  updateOne = async (req, res, next) => {
     try {
       const updated = await this.Model.findByIdAndUpdate(
         req.params.id,
@@ -74,19 +84,33 @@ export default class baseController {
         { new: true }
       );
       if (!updated)
-        return res.status(404).json({ success: false, message: "Not found" });
-      res.json({ success: true, message: "Updated successfully", data: updated });
+        return res
+          .status(404)
+          .json({ success: false, message: "Not found such an ID" });
+
+      return res.status(200).json({
+        success: true,
+        message: "Updated successfully",
+        data: updated,
+      });
     } catch (error) {
       next(error);
     }
   };
 
-  delete = async (req, res, next) => {
+  deleteOne = async (req, res, next) => {
     try {
       const deleted = await this.Model.findByIdAndDelete(req.params.id);
       if (!deleted)
-        return res.status(404).json({ success: false, message: "Not found" });
-      res.json({ success: true, message: "Deleted successfully" });
+        return res
+          .status(404)
+          .json({ success: false, message: "Not found such an ID" });
+
+      return res.status(200).json({
+        success: true,
+        message: "Deleted successfully",
+        data: deleted,
+      });
     } catch (error) {
       next(error);
     }

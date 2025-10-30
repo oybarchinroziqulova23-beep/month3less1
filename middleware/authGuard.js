@@ -1,13 +1,13 @@
 import { verifyToken } from '../helper/jwt.js';
 import { config } from '../config/index.js';
-import { ApiError } from '../helper/errorMessage.js';
+import { AppError } from '../helper/errorMessage.js';
 
 export async function authGuard(req, res, next) {
   try {
     const authHeader = req.headers.authorization;
 
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      return next(new ApiError(401, 'Authorization token required!'));
+      return next(new AppError(401, 'Authorization token required!'));
     }
 
     const token = authHeader.split(' ')[1];
@@ -18,6 +18,6 @@ export async function authGuard(req, res, next) {
 
     next();
   } catch (error) {
-    return next(new ApiError(401, 'Invalid or expired token!'));
+    return next(new AppError(401, 'Invalid or expired token!'));
   }
 }
